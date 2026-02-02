@@ -1,0 +1,7 @@
+{
+  "name": "order-service",
+  "version": "1.0.0",
+  "description": "Order processing and management service",
+  "authors": ["POS Team"],
+  "targetFramework": "net8.0"
+}

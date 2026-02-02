@@ -1,0 +1,7 @@
+{
+  "name": "payment-service",
+  "version": "1.0.0",
+  "description": "Payment processing service",
+  "authors": ["POS Team"],
+  "targetFramework": "net8.0"
+}

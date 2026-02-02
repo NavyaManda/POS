@@ -1,0 +1,7 @@
+{
+  "name": "auth-service",
+  "version": "1.0.0",
+  "description": "Authentication and JWT token management service",
+  "authors": ["POS Team"],
+  "targetFramework": "net8.0"
+}

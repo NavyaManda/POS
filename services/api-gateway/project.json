@@ -1,0 +1,7 @@
+{
+  "name": "api-gateway",
+  "version": "1.0.0",
+  "description": "API Gateway - Single entry point for all client requests",
+  "authors": ["POS Team"],
+  "targetFramework": "net8.0"
+}

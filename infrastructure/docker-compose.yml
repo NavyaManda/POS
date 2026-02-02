@@ -1,0 +1,226 @@
+Docker Compose Configuration for POS Microservices
+
+version: '3.8'
+
+services:
+  # SQL Server Database
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      SA_PASSWORD: "PosSystem@123"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql_data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P PosSystem@123 -Q 'SELECT 1' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # RabbitMQ Message Broker
+  rabbitmq:
+    image: rabbitmq:3.12-management
+    environment:
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASS: "guest"
+    ports:
+      - "5672:5672"        # AMQP port
+      - "15672:15672"      # Management UI
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # API Gateway (Port 5000)
+  api-gateway:
+    build:
+      context: ./services/api-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "5000:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - JwtSecret=your-super-secret-key-change-in-production
+    depends_on:
+      - auth-service
+      - menu-service
+      - order-service
+      - inventory-service
+      - payment-service
+      - kds-service
+      - loyalty-service
+      - notification-service
+
+  # Auth Service (Port 5001)
+  auth-service:
+    build:
+      context: ./services/auth-service
+      dockerfile: Dockerfile
+    ports:
+      - "5001:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionString=Server=mssql;Database=POSAuthDb;User Id=sa;Password=PosSystem@123;
+      - JwtSecret=your-super-secret-key-change-in-production
+    depends_on:
+      mssql:
+        condition: service_healthy
+
+  # Menu Service (Port 5002)
+  menu-service:
+    build:
+      context: ./services/menu-service
+      dockerfile: Dockerfile
+    ports:
+      - "5002:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionString=Server=mssql;Database=POSMenuDb;User Id=sa;Password=PosSystem@123;
+    depends_on:
+      mssql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  # Inventory Service (Port 5003)
+  inventory-service:
+    build:
+      context: ./services/inventory-service
+      dockerfile: Dockerfile
+    ports:
+      - "5003:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionString=Server=mssql;Database=POSInventoryDb;User Id=sa;Password=PosSystem@123;
+    depends_on:
+      mssql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  # Order Service (Port 5004)
+  order-service:
+    build:
+      context: ./services/order-service
+      dockerfile: Dockerfile
+    ports:
+      - "5004:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionString=Server=mssql;Database=POSOrderDb;User Id=sa;Password=PosSystem@123;
+      - RabbitMqHost=rabbitmq
+      - RedisConnection=redis:6379
+    depends_on:
+      mssql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # Payment Service (Port 5005)
+  payment-service:
+    build:
+      context: ./services/payment-service
+      dockerfile: Dockerfile
+    ports:
+      - "5005:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionString=Server=mssql;Database=POSPaymentDb;User Id=sa;Password=PosSystem@123;
+      - RabbitMqHost=rabbitmq
+      - StripeApiKey=sk_test_your_stripe_key_here
+    depends_on:
+      mssql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  # Kitchen Display Service (Port 5006)
+  kds-service:
+    build:
+      context: ./services/kitchen-display-service
+      dockerfile: Dockerfile
+    ports:
+      - "5006:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionString=Server=mssql;Database=POSKDSDb;User Id=sa;Password=PosSystem@123;
+      - RabbitMqHost=rabbitmq
+    depends_on:
+      mssql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  # Loyalty Service (Port 5007)
+  loyalty-service:
+    build:
+      context: ./services/loyalty-service
+      dockerfile: Dockerfile
+    ports:
+      - "5007:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionString=Server=mssql;Database=POSLoyaltyDb;User Id=sa;Password=PosSystem@123;
+      - RabbitMqHost=rabbitmq
+    depends_on:
+      mssql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  # Notification Service (Port 5008)
+  notification-service:
+    build:
+      context: ./services/notification-service
+      dockerfile: Dockerfile
+    ports:
+      - "5008:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionString=Server=mssql;Database=POSNotificationDb;User Id=sa;Password=PosSystem@123;
+      - RabbitMqHost=rabbitmq
+      - SendGridApiKey=SG.your_sendgrid_key_here
+      - TwilioAccountSid=your_twilio_account_sid
+      - TwilioAuthToken=your_twilio_auth_token
+    depends_on:
+      mssql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  # Angular Frontend (Port 4200)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "4200:80"
+    environment:
+      - API_GATEWAY_URL=http://localhost:5000
+    depends_on:
+      - api-gateway
+
+volumes:
+  mssql_data:
+  rabbitmq_data:
+  redis_data:

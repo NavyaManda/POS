@@ -1,0 +1,7 @@
+{
+  "name": "kitchen-display-service",
+  "version": "1.0.0",
+  "description": "Kitchen Display System for real-time order management",
+  "authors": ["POS Team"],
+  "targetFramework": "net8.0"
+}
