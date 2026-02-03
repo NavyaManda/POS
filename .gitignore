@@ -89,3 +89,67 @@ obj/
 # Coverage Reports
 coverage/
 OpenCover/
+
+# .NET Specific
+*.dll
+*.exe
+*.pdb
+*.dylib
+.vs/
+.vscode/
+*.VisualState.xml
+*.psess
+*.vsp
+*.vspx
+*.sap
+
+# Project Lock Files
+project.lock.json
+project.fragment.lock.json
+artifacts/
+.metadata
+
+# Runtime files
+runtimes/
+
+# User-specific files
+.vscode/settings.json
+.vscode/extensions.json
+.vscode/launch.json
+.vscode/tasks.json
+
+# Rider
+.idea/
+*.sln.iml
+*.sw?
+
+# Local environment variables
+.env.*.local
+*.local.json
+
+# macOS specific
+.DS_Store
+.AppleDouble
+.LSOverride
+*.swp
+*.swo
+*~
+
+# Package managers
+.npm
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
+# Frontend builds  
+frontend/dist/
+frontend/node_modules/
+.angular/cache/
+
+# Database backups and temp files
+*.bak
+*.backup
+*.db-shm
+*.db-wal
