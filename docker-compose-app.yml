@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  # AuthService Backend (.NET)
+  auth-service:
+    image: mcr.microsoft.com/dotnet/aspnet:10
+    container_name: pos-auth-service
+    build:
+      context: ./AuthService
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5001"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5001
+    volumes:
+      - ./AuthService:/app
+    networks:
+      - pos-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5001/api/v1/auth/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # Views Frontend (Angular with Node.js)
+  views:
+    image: node:18-alpine
+    container_name: pos-views
+    working_dir: /app
+    volumes:
+      - ./views:/app
+    ports:
+      - "4200:4200"
+    command: sh -c "npm install && npm start"
+    environment:
+      - NODE_ENV=development
+    networks:
+      - pos-network
+    depends_on:
+      - auth-service
+
+networks:
+  pos-network:
+    driver: bridge

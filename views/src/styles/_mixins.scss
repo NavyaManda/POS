@@ -1,0 +1,126 @@
+// Flexbox utilities
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+// Responsive design
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == 'sm' {
+    @media (max-width: 480px) {
+      @content;
+    }
+  } @else if $breakpoint == 'md' {
+    @media (max-width: 768px) {
+      @content;
+    }
+  } @else if $breakpoint == 'lg' {
+    @media (max-width: 1024px) {
+      @content;
+    }
+  } @else if $breakpoint == 'xl' {
+    @media (max-width: 1280px) {
+      @content;
+    }
+  }
+}
+
+// Text truncation
+@mixin text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin text-truncate-lines($lines: 2) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// Smooth transitions
+@mixin smooth-transition($properties: all, $duration: $transition-base) {
+  transition: $properties $duration;
+}
+
+// Focus styles
+@mixin focus-ring($color: $primary-color) {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba($color, 0.1);
+  border-color: $color;
+}
+
+// Hover effects
+@mixin hover-scale {
+  transition: transform $transition-fast;
+  
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+@mixin hover-shadow {
+  transition: box-shadow $transition-fast;
+  
+  &:hover {
+    box-shadow: $shadow-lg;
+  }
+}
+
+@mixin hover-lift {
+  transition: transform $transition-fast;
+  
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
+// Disabled state
+@mixin disabled-state {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+// Gradient backgrounds
+@mixin gradient-primary {
+  background: linear-gradient(135deg, $primary-color 0%, $primary-dark 100%);
+}
+
+@mixin gradient-success {
+  background: linear-gradient(135deg, $success-color 0%, #20c997 100%);
+}
+
+@mixin gradient-danger {
+  background: linear-gradient(135deg, $danger-color 0%, #e74c3c 100%);
+}
+
+// Absolute centering
+@mixin absolute-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+// Clearfix
+@mixin clearfix {
+  &::after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}

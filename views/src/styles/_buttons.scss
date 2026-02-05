@@ -1,0 +1,178 @@
+@import 'variables';
+@import 'mixins';
+
+// Primary Button
+.btn-primary {
+  background-color: $primary-color;
+  border: none;
+  color: $white;
+  padding: 10px 20px;
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  border-radius: $border-radius;
+  cursor: pointer;
+  transition: $transition-base;
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-xs;
+
+  &:hover:not(:disabled) {
+    background-color: $primary-dark;
+    @include hover-lift;
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    @include disabled-state;
+  }
+
+  &:focus {
+    @include focus-ring($primary-color);
+  }
+
+  &.btn-sm {
+    padding: 8px 16px;
+    font-size: $font-size-sm;
+  }
+
+  &.btn-lg {
+    padding: 12px 24px;
+    font-size: $font-size-lg;
+  }
+
+  &.btn-block {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+// Secondary Button
+.btn-secondary {
+  background-color: $gray-200;
+  border: 1px solid $gray-300;
+  color: $gray-800;
+  padding: 10px 20px;
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  border-radius: $border-radius;
+  cursor: pointer;
+  transition: $transition-base;
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-xs;
+
+  &:hover:not(:disabled) {
+    background-color: $gray-300;
+    border-color: $gray-400;
+  }
+
+  &:disabled {
+    @include disabled-state;
+  }
+
+  &:focus {
+    @include focus-ring($gray-400);
+  }
+}
+
+// Danger Button
+.btn-danger {
+  background-color: $danger-color;
+  border: none;
+  color: $white;
+  padding: 10px 20px;
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  border-radius: $border-radius;
+  cursor: pointer;
+  transition: $transition-base;
+
+  &:hover:not(:disabled) {
+    background-color: #c82333;
+  }
+
+  &:disabled {
+    @include disabled-state;
+  }
+
+  &:focus {
+    @include focus-ring($danger-color);
+  }
+}
+
+// Success Button
+.btn-success {
+  background-color: $success-color;
+  border: none;
+  color: $white;
+  padding: 10px 20px;
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  border-radius: $border-radius;
+  cursor: pointer;
+  transition: $transition-base;
+
+  &:hover:not(:disabled) {
+    background-color: #218838;
+  }
+
+  &:disabled {
+    @include disabled-state;
+  }
+
+  &:focus {
+    @include focus-ring($success-color);
+  }
+}
+
+// Icon Button
+.btn-icon {
+  width: 44px;
+  height: 44px;
+  @include flex-center;
+  border: none;
+  background-color: $gray-200;
+  border-radius: $border-radius;
+  cursor: pointer;
+  transition: $transition-base;
+  flex-shrink: 0;
+
+  &:hover {
+    background-color: $gray-300;
+  }
+
+  &:disabled {
+    @include disabled-state;
+  }
+
+  i {
+    font-size: $font-size-lg;
+  }
+}
+
+// Button Group
+.btn-group {
+  display: flex;
+  gap: $spacing-sm;
+
+  .btn {
+    flex: 1;
+
+    &:not(:last-child) {
+      margin-right: 0;
+    }
+  }
+}
+
+// Spinner on Button
+.btn {
+  .spinner-border {
+    width: 14px;
+    height: 14px;
+    border-width: 2px;
+    margin-right: $spacing-xs;
+  }
+}
