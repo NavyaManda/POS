@@ -1,20 +1,19 @@
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
-COPY ["src/MenuService.API/MenuService.API.csproj", "src/MenuService.API/"]
-RUN dotnet restore "src/MenuService.API/MenuService.API.csproj"
+COPY ["MenuService/src/MenuService.API/MenuService.API.csproj", "MenuService.API/"]
+RUN dotnet restore "MenuService.API/MenuService.API.csproj"
 
-COPY . .
-WORKDIR "/src/src/MenuService.API"
+COPY MenuService/src/MenuService.API/ MenuService.API/
+WORKDIR "/src/MenuService.API"
 RUN dotnet build "MenuService.API.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "MenuService.API.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "MenuService.API.csproj" -c Release -o /app/publish
 
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
 WORKDIR /app
 COPY --from=publish /app/publish .
-
-EXPOSE 80
-ENV ASPNETCORE_URLS=http://+:80
+EXPOSE 5002
+ENV ASPNETCORE_URLS=http://+:5002
 ENTRYPOINT ["dotnet", "MenuService.API.dll"]

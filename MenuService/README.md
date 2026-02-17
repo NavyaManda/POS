@@ -1,4 +1,63 @@
-# Menu Service
+# MenuService API
+
+Restaurant menu management microservice for the POS system.
+
+## Features
+
+- Menu item management (CRUD operations)
+- Category management
+- Menu filtering by category
+- Item attributes (vegetarian, spicy, calories)
+- SQLite database with seeded data
+
+## API Endpoints
+
+### Menu Items
+- `GET /api/v1/menu/items` - Get all menu items
+- `GET /api/v1/menu/items/{id}` - Get specific menu item
+- `GET /api/v1/menu/category/{categoryId}` - Get items by category
+- `POST /api/v1/menu/items` - Create menu item
+- `PUT /api/v1/menu/items/{id}` - Update menu item
+- `DELETE /api/v1/menu/items/{id}` - Delete menu item
+
+### Categories
+- `GET /api/v1/menu/categories` - Get all categories
+- `GET /api/v1/menu/categories/{id}` - Get specific category
+- `POST /api/v1/menu/categories` - Create category
+- `PUT /api/v1/menu/categories/{id}` - Update category
+- `DELETE /api/v1/menu/categories/{id}` - Delete category
+
+### Health
+- `GET /api/v1/menu/health` - Service health check
+
+## Building & Running
+
+### Local Development
+```bash
+cd MenuService/src/MenuService.API
+dotnet build
+dotnet run --urls http://localhost:5002
+```
+
+### Docker
+```bash
+docker build -f MenuService/Dockerfile -t menuservice:latest .
+docker run -p 5002:5002 menuservice:latest
+```
+
+## Database
+
+SQLite database is automatically created on first run with:
+- 4 default categories (Appetizers, Main Course, Desserts, Beverages)
+- 4 sample menu items
+- Proper indexing and foreign keys
+
+## Default Menu Items
+
+1. **Caesar Salad** - $8.99 (Appetizers, Vegetarian)
+2. **Grilled Chicken Breast** - $15.99 (Main Course)
+3. **Spicy Thai Curry** - $14.99 (Main Course, Spicy)
+4. **Chocolate Cake** - $6.99 (Desserts, Vegetarian)
 
 Manages restaurant menu items, categories, variants, and pricing.
 

@@ -7,6 +7,7 @@ using AuthService.API.Data;
 using AuthService.API.Services;
 using AuthService.API.Repositories;
 using AuthService.API.Interfaces;
+using AuthService.API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -71,6 +72,9 @@ using (var scope = app.Services.CreateScope())
     var dbContext = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
     dbContext.Database.EnsureCreated(); // Create tables if they don't exist
 }
+
+// Exception handling middleware (must be early in pipeline)
+app.UseExceptionHandlingMiddleware();
 
 app.UseHttpsRedirection();
 app.UseCors("AllowAll");
