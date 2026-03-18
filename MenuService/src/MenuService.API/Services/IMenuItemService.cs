@@ -54,16 +54,11 @@ public interface IBundlePricingService
 
 public interface ICategoryService
 {
-    Task<List<CategoryResponse>> GetRestaurantCategoriesAsync(int restaurantConfigId);
+    Task<List<CategoryResponse>> GetCategoriesByRestaurantAsync(int restaurantConfigId);
     Task<CategoryResponse> GetCategoryByIdAsync(int id);
     Task<CategoryResponse> CreateCategoryAsync(int restaurantConfigId, CategoryRequest request);
     Task<CategoryResponse> UpdateCategoryAsync(int id, CategoryRequest request);
-    Task DeleteCategoryAsync(int id);
-    Task<CategoryResponse> CreateCategoryAsync(int restaurantId, CategoryRequest request);
-    Task<CategoryResponse> GetCategoryByIdAsync(int id, int restaurantId);
-    Task<List<CategoryResponse>> GetCategoriesByRestaurantAsync(int restaurantId);
-    Task<CategoryResponse> UpdateCategoryAsync(int id, int restaurantId, CategoryRequest request);
-    Task<bool> DeleteCategoryAsync(int id, int restaurantId);
+    Task<bool> DeleteCategoryAsync(int id);
 }
 
 public interface ISubcategoryService
@@ -77,17 +72,11 @@ public interface ISubcategoryService
 
 public interface IRestaurantConfigService
 {
-    Task<RestaurantConfigResponse> GetConfigByRestaurantIdAsync(string restaurantId);
     Task<RestaurantConfigResponse> GetConfigByIdAsync(int id);
     Task<RestaurantConfigResponse> CreateConfigAsync(RestaurantConfigRequest request);
     Task<RestaurantConfigResponse> UpdateConfigAsync(int id, RestaurantConfigRequest request);
-    Task DeleteConfigAsync(int id);
+    Task<bool> DeleteConfigAsync(int id);
     Task<List<RestaurantConfigResponse>> GetAllActiveConfigsAsync();
-    Task<RestaurantConfigResponse> CreateRestaurantConfigAsync(RestaurantConfigRequest request);
-    Task<RestaurantConfigResponse> GetRestaurantConfigByIdAsync(int id);
-    Task<List<RestaurantConfigResponse>> GetAllRestaurantConfigsAsync();
-    Task<RestaurantConfigResponse> UpdateRestaurantConfigAsync(int id, RestaurantConfigRequest request);
-    Task<bool> DeleteRestaurantConfigAsync(int id);
     Task<List<RestaurantConfigResponse>> GetRestaurantsByTypeAsync(string restaurantType);
     Task<List<RestaurantConfigResponse>> GetRestaurantsByCuisineAsync(string cuisineType);
 }

@@ -25,9 +25,22 @@ builder.Services.AddDbContext<MenuContext>(options =>
 // Repositories
 builder.Services.AddScoped<IMenuItemRepository, MenuItemRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IEnhancedMenuRepository, EnhancedMenuRepository>();
+builder.Services.AddScoped<IRestaurantConfigRepository, RestaurantConfigRepository>();
+builder.Services.AddScoped<IComboDealRepository, ComboDealRepository>();
+builder.Services.AddScoped<IBundlePriceRepository, BundlePriceRepository>();
 
 // Services
 builder.Services.AddScoped<IMenuService, MenuService.API.Services.MenuService>();
+builder.Services.AddScoped<IMenuItemService, MenuItemService>();
+builder.Services.AddScoped<ICustomizationService, CustomizationService>();
+builder.Services.AddScoped<IVariantService, VariantService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ISubcategoryService, SubcategoryService>();
+builder.Services.AddScoped<IRestaurantConfigService, RestaurantConfigService>();
+builder.Services.AddScoped<IComboDealService, ComboDealService>();
+builder.Services.AddScoped<IBundlePricingService, BundlePricingService>();
+builder.Services.AddScoped<IMenuValidationService, MenuValidationService>();
 
 // Logging
 builder.Services.AddLogging();

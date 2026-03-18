@@ -29,8 +29,8 @@ namespace MenuService.API.Controllers
             try
             {
                 _logger.LogInformation($"Creating restaurant: {request.RestaurantName}");
-                var response = await _restaurantConfigService.CreateRestaurantConfigAsync(request);
-                return CreatedAtAction(nameof(GetRestaurantById), new { id = response.RestaurantConfigId }, response);
+                var response = await _restaurantConfigService.CreateConfigAsync(request);
+                return CreatedAtAction(nameof(GetRestaurantById), new { id = response.Id }, response);
             }
             catch (InvalidOperationException ex)
             {
@@ -49,7 +49,7 @@ namespace MenuService.API.Controllers
             try
             {
                 _logger.LogInformation($"Getting restaurant config: {id}");
-                var response = await _restaurantConfigService.GetRestaurantConfigByIdAsync(id);
+                var response = await _restaurantConfigService.GetConfigByIdAsync(id);
                 if (response == null)
                     return NotFound(new { error = "Restaurant not found" });
 
@@ -71,7 +71,7 @@ namespace MenuService.API.Controllers
         {
             try
             {
-                var restaurants = await _restaurantConfigService.GetAllRestaurantConfigsAsync();
+                var restaurants = await _restaurantConfigService.GetAllActiveConfigsAsync();
                 return Ok(restaurants);
             }
             catch (Exception ex)
@@ -91,7 +91,7 @@ namespace MenuService.API.Controllers
             try
             {
                 _logger.LogInformation($"Updating restaurant config: {id}");
-                var response = await _restaurantConfigService.UpdateRestaurantConfigAsync(id, request);
+                var response = await _restaurantConfigService.UpdateConfigAsync(id, request);
                 if (response == null)
                     return NotFound(new { error = "Restaurant not found" });
 
@@ -113,7 +113,7 @@ namespace MenuService.API.Controllers
             try
             {
                 _logger.LogInformation($"Deleting restaurant config: {id}");
-                var success = await _restaurantConfigService.DeleteRestaurantConfigAsync(id);
+                var success = await _restaurantConfigService.DeleteConfigAsync(id);
                 if (!success)
                     return NotFound(new { error = "Restaurant not found" });
 
@@ -191,7 +191,7 @@ namespace MenuService.API.Controllers
             {
                 _logger.LogInformation($"Creating category for restaurant {restaurantId}: {request.Name}");
                 var response = await _categoryService.CreateCategoryAsync(restaurantId, request);
-                return CreatedAtAction(nameof(GetCategoryById), new { restaurantId, id = response.CategoryId }, response);
+                return CreatedAtAction(nameof(GetCategoryById), new { restaurantId, id = response.Id }, response);
             }
             catch (InvalidOperationException ex)
             {
@@ -209,7 +209,7 @@ namespace MenuService.API.Controllers
         {
             try
             {
-                var response = await _categoryService.GetCategoryByIdAsync(id, restaurantId);
+                var response = await _categoryService.GetCategoryByIdAsync(id);
                 if (response == null)
                     return NotFound(new { error = "Category not found" });
 
@@ -250,7 +250,7 @@ namespace MenuService.API.Controllers
         {
             try
             {
-                var response = await _categoryService.UpdateCategoryAsync(id, restaurantId, request);
+                var response = await _categoryService.UpdateCategoryAsync(id, request);
                 if (response == null)
                     return NotFound(new { error = "Category not found" });
 
@@ -271,7 +271,7 @@ namespace MenuService.API.Controllers
         {
             try
             {
-                var success = await _categoryService.DeleteCategoryAsync(id, restaurantId);
+                var success = await _categoryService.DeleteCategoryAsync(id);
                 if (!success)
                     return NotFound(new { error = "Category not found" });
 
