@@ -57,9 +57,23 @@ public class CategoryService : ICategoryService
         return MapToResponse(updated);
     }
 
-    public async Task DeleteCategoryAsync(int id)
+    public async Task<List<CategoryResponse>> GetCategoriesByRestaurantAsync(int restaurantId)
     {
-        await _menuRepository.DeleteCategoryAsync(id);
+        var categories = await _menuRepository.GetCategoriesByRestaurantAsync(restaurantId);
+        return categories.Select(MapToResponse).ToList();
+    }
+
+    public async Task<bool> DeleteCategoryAsync(int id)
+    {
+        try
+        {
+            await _menuRepository.DeleteCategoryAsync(id);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     private CategoryResponse MapToResponse(Category category)
@@ -228,9 +242,35 @@ public class RestaurantConfigService : IRestaurantConfigService
         return MapToResponse(updated);
     }
 
-    public async Task DeleteConfigAsync(int id)
+    public async Task<bool> DeleteConfigAsync(int id)
     {
-        await _configRepository.DeleteAsync(id);
+        try
+        {
+            await _configRepository.DeleteAsync(id);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    public async Task<List<RestaurantConfigResponse>> GetRestaurantsByTypeAsync(string restaurantType)
+    {
+        var configs = await _configRepository.GetAllActiveAsync();
+        return configs
+            .Where(c => c.RestaurantType == restaurantType)
+            .Select(MapToResponse)
+            .ToList();
+    }
+
+    public async Task<List<RestaurantConfigResponse>> GetRestaurantsByCuisineAsync(string cuisineType)
+    {
+        var configs = await _configRepository.GetAllActiveAsync();
+        return configs
+            .Where(c => c.CuisineType == cuisineType)
+            .Select(MapToResponse)
+            .ToList();
     }
 
     public async Task<List<RestaurantConfigResponse>> GetAllActiveConfigsAsync()

@@ -23,15 +23,12 @@ builder.Services.AddDbContext<MenuContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Repositories
-builder.Services.AddScoped<IMenuItemRepository, MenuItemRepository>();
-builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IEnhancedMenuRepository, EnhancedMenuRepository>();
 builder.Services.AddScoped<IRestaurantConfigRepository, RestaurantConfigRepository>();
 builder.Services.AddScoped<IComboDealRepository, ComboDealRepository>();
 builder.Services.AddScoped<IBundlePriceRepository, BundlePriceRepository>();
 
 // Services
-builder.Services.AddScoped<IMenuService, MenuService.API.Services.MenuService>();
 builder.Services.AddScoped<IMenuItemService, MenuItemService>();
 builder.Services.AddScoped<ICustomizationService, CustomizationService>();
 builder.Services.AddScoped<IVariantService, VariantService>();
